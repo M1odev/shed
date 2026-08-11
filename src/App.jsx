@@ -1,34 +1,97 @@
-import './index.css'
-import { useEffect, useState } from 'react'
+import { Routes, Route, Navigate, useLocation, Outlet} from "react-router-dom";
+import {useEffect,useState} from 'react'
 import {supabase} from './lib/supabase'
 
 
+import Auth from "./pages/auth";
+import Home from "./pages/home";
+import Onboarding from "./pages/onboarding";
 
-export default function App() {
 
-  const[sessions,setSessions] = useState([])
+function ProtectedRoute() {
+    const [loading, setLoading] = useState(true)
+    const [destination, setDestination] = useState(null)
+    const location = useLocation()
 
-  useEffect(() => {
-    
-    async function getSessions(){
-      const {data, error} = await supabase
-        .from('practice_sessions')
-        .select()
+    useEffect(() => {
+        async function checkUser() {
 
-      console.log(data)
-      console.log(error)
+            const { data: { user }, error } = await supabase.auth.getUser()
 
-      setSessions(data)
+            if (!user||error){
+              console.log("user: ", user)
+              console.log("error: ",error)
+              if(location.pathname !== "/"){
+              setDestination("/")
+              setLoading(false)
+              return
+              }else{
+                setLoading(false)
+                return
+              }
+            }
 
+            
+     
+            const { data: profile, error: profileError } = await supabase
+                .from('profiles')
+                .select('onboarding_completed')
+                .eq('id', user.id)
+                .single()
+
+            profileError && console.log(profileError)
+
+            const onboarding_completed = profile?.onboarding_completed
+
+            if (!onboarding_completed && location.pathname !== "/onboarding"){
+              setDestination("/onboarding")
+              setLoading(false)
+              return
+            }
+
+            if (onboarding_completed && location.pathname === "/onboarding"){
+              setDestination("/home")
+              setLoading(false)
+              return
+            }
+
+            if (onboarding_completed && location.pathname === "/"){
+              setDestination("/home")
+              setLoading(false)
+              return
+            }
+
+            setDestination(null)
+            setLoading(false)
+        }
+
+        checkUser()
+    }, [location.pathname])
+
+    if (loading) {
+        return <div>Loading...</div>
     }
 
-    getSessions()
+    if (destination){
+      console.log("Manual Route to ", destination)
+      return <Navigate to={destination} replace/>
+    }
 
-  
-
-  }, [])
-
-
+    return <Outlet/>
 }
 
+export default function App() {
+  return (
+    <Routes>
+
+      <Route path="/" element={<Auth />} />
+
+      <Route element = {<ProtectedRoute/>}>
+      <Route path="/home" element={<Home />}/>
+      <Route path="/onboarding" element={<Onboarding />} />
+      </Route>
+
+    </Routes>
+  );
+}
 

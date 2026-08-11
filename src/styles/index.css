@@ -109,3 +109,82 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.error-message {
+  color: #e63946;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.link-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #00beee; 
+  cursor: pointer;
+  font: inherit; 
+}
+
+
+.link-button:hover {
+  color: #551a8b; 
+}
+
+.line-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #000000;
+  outline: none;
+  padding: 5px 0;
+}
+
+.line-input:focus {
+  border-bottom: 2px solid #007bff;
+}
+
+.inline-container {
+  display: flex;        
+  align-items: center;   
+  gap: 10px;             
+}
+
+.text-success {
+  color: #7ce0b1; /* Standard accessible green color */
+  font-weight: 500;
+}
+
+ .btn-insert {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #0ab35e;
+      color: #ffffff;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .btn-insert::before {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-top: 2px solid #ffffff;
+      border-right: 2px solid #ffffff;
+      transform: rotate(45deg);
+      opacity: 0.8;
+      margin-right: 2px;
+    }
+
+    .btn-insert:hover {
+      border-color: #ffffff;
+    }
+
+    .btn-insert:active {
+      background-color: #003319;
+    }
