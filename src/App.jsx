@@ -6,6 +6,7 @@ import {supabase} from './lib/supabase'
 import Auth from "./pages/auth";
 import Home from "./pages/home";
 import Onboarding from "./pages/onboarding";
+import Manual from "./pages/manual_session";
 
 
 function ProtectedRoute() {
@@ -88,7 +89,8 @@ export default function App() {
 
       <Route element = {<ProtectedRoute/>}>
       <Route path="/home" element={<Home />}/>
-      <Route path="/onboarding" element={<Onboarding />} />
+      <Route path="/manual_session" element={<Manual/>}/>
+      <Route path="/onboarding" element={<Onboarding />}/>
       </Route>
 
     </Routes>

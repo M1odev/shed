@@ -14,7 +14,7 @@ async function checkIndividuality(username){
 
 }
 
-const USER_ID_FOR_TEST = 'a626c413-d151-4bf1-9f39-82e9de3754fb';
+
 
 export default function  Onboarding(){
     const [userName,setUser] = useState('')
