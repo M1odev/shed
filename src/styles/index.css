@@ -471,7 +471,9 @@ input:checked + .slider:before {
   border-bottom: 2px solid #868686; 
   background: transparent;      
   outline: none;            
-  padding: 5px 0;               
+  padding: 5px 0; 
+  box-sizing:border-box;
+  flex-shrink:0;              
 
 }
 
@@ -502,19 +504,69 @@ input:checked + .slider:before {
     text-align: right;
 }
 
-.practice-item-header {
+.practice-table-header {
     display: grid;
-    grid-template-columns: 1fr 100px;
+    grid-template-columns: 1fr 130px;
 
     width: 500px;
-    padding: 8px 16px;
-
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #777;
     box-sizing: border-box;
+
+    border: 1px solid #ccc;
+    border-bottom: none;
+
+    font-weight: 600;
 }
 
-.practice-item-header span:last-child {
-    text-align: right;
+.practice-table-header span {
+    padding: 10px 12px;
+}
+
+.practice-table-header span:first-child {
+    border-right: 1px solid #ccc;
+}
+
+
+.practice-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    width: 300px;
+
+    border: 1px solid #ccc;
+    border-radius: 0 0 6px 6px;
+
+    overflow: hidden;
+}
+
+
+.practice-item {
+    display: grid;
+    grid-template-columns: 1fr 130px;
+
+    min-height: 42px;
+
+    border-bottom: 1px solid #ccc;
+}
+
+
+.practice-item:last-child {
+    border-bottom: none;
+}
+
+
+.practice-item span {
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+}
+
+
+.practice-item span:first-child {
+    border-right: 1px solid #ccc;
+}
+
+
+.practice-item span:last-child {
+    justify-content: flex-end;
 }

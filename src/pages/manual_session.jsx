@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import { supabase } from "../lib/supabase";
 import Navbar from "../components/navbar";
 import { Navigate } from 'react-router-dom';
@@ -9,9 +9,14 @@ import { SquarePlus } from 'lucide-react';
 
 
 
-function Items(){
+function Items({onDurationChange, onItemsChange}){
     const [practiceItems,setPracticeItems] = useState([])
     const [makingItem, setMakingItem] = useState(true)
+
+    const totalDuration = practiceItems.reduce(
+    (total, item) => total + Number(item.duration),
+    0)
+
  
     const renderItemsList = practiceItems.map(item => (
     <li className="practice-item" key={item.id}>
@@ -33,6 +38,17 @@ function Items(){
         e.target.reset()
     }
 
+    useEffect(() => {
+    onDurationChange(totalDuration);
+    }, [totalDuration])
+
+    useEffect(
+        ()=>{
+         onItemsChange(practiceItems)
+        }, [practiceItems]
+    )
+
+
 
 
 
@@ -48,8 +64,8 @@ function Items(){
       {makingItem && (
         <div className="div-container-inline">
             <form onSubmit={addItem} style={{display:"flex", gap:"15px"}}>
-                <input className="line-text"type="text" name="name"placeholder="Clarke Study #2" required/>
-                <input className="line-text" type="number" name="duration" placeholder="15" min="1" required/>
+                <input className="line-text"type="text" name="name"placeholder="Item Name" required/>
+                <input className="line-text" type="number" name="duration" placeholder="Duration in Minutes" min="1" required/>
                 <button className="icon-button"type="submit"> <SquareCheck/> </button>
             </form>
             <button className="icon-button"onClick={()=>setMakingItem(false)}><SquareX/></button>
@@ -58,11 +74,7 @@ function Items(){
     </div>
 
     <div>
-    <div className="practice-item-header">
-    <span>Item</span>
-    <span>Duration</span>
-    </div>
-
+    
     <ul className="practice-items">
     {renderItemsList}
     </ul>
@@ -89,9 +101,13 @@ export default function Manual(){
     );
 
     const [usingItems,SetUsingItems] = useState(true)
+    const [itemDuration, setItemDuration] = useState(0)
+    const [items,setItems] = useState([])
     const [loading, setLoading] = useState(false);
     const [redirectTo, setRedirectTo] = useState(null);
     const [viewingInfo, setViewingInfo] = useState(false);
+    
+    const finalDuration = usingItems ? itemDuration: session.duration
 
     if (redirectTo) {
         return <Navigate to={redirectTo} replace={true} />;
@@ -101,19 +117,32 @@ export default function Manual(){
         setLoading(true);
         try {
             const { data: { user } } = await supabase.auth.getUser();
-            const { data, error } = await supabase
+            const { data: sessionData, error } = await supabase
             .from('practice_sessions')
             .insert({
                 user_id: user.id,
                 title: session.title,
-                duration: session.duration,
+                duration: finalDuration,
                 rating: session.rating,
                 description: session.description,
                 improved: session.improved
             })
             .select();
-            console.log('data: ', data);
+            console.log('data: ', sessionData);
             console.log('error ', error);
+
+            if (usingItems){
+                for ( let item in items){
+                const {data:itemsData, error : itemsError} = await supabase
+                .from('session_items')
+                .insert({
+                    session_id: sessionData[0].id,
+                    item_name: items[item].name,
+                    duration: items[item].duration,
+                    position: item
+                })
+            }
+        }
 
             if (!error) {
             setRedirectTo('/home');
@@ -179,7 +208,21 @@ export default function Manual(){
     </div>
 
     <div className="div-container-inline">
-         <Items/>
+        { usingItems ?
+         (<Items onDurationChange={setItemDuration} onItemsChange={setItems}/>) : 
+         (<div className="input-container">
+         <label htmlFor="duration_input">Duration</label>
+         <input
+        type="number"
+        id="duration_input"
+        min="1"
+        value={session.duration}
+        onChange={(e) =>
+        setSession({...session, duration: Number(e.target.value)})
+        }
+        />
+        </div>)
+        }  
     </div>
 
 
