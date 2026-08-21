@@ -1,0 +1,48 @@
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+
+export function usePracticeSessions(limit = 10) {
+  const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchSessions() {
+      setLoading(true);
+      setError(null);
+
+      const { data, error: supabaseError } = await supabase
+        .from("practice_sessions")
+        .select(
+          `
+          id,
+          title,
+          duration,
+          rating,
+          description,
+          improved,
+          created_at,
+          user_id,
+          profiles!user_id (
+            username,
+            display_name
+          )
+        `,
+        )
+        .order("created_at", { ascending: false })
+        .limit(limit);
+
+      if (supabaseError) {
+        setError(supabaseError);
+      } else {
+        setSessions(data);
+      }
+
+      setLoading(false);
+    }
+
+    fetchSessions();
+  }, [limit]);
+
+  return { sessions, loading, error };
+}
