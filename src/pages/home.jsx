@@ -20,7 +20,7 @@ function NewSessionButton() {
 
       {menuOpen && (
         <div className="new-session-options">
-          <NavLink to="/home">
+          <NavLink to="/live_session">
             <span>New Live Pratice Session</span>
             <small>Track your practice in real time</small>
           </NavLink>
