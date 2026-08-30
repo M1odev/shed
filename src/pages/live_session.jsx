@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react";
 
 import submitSession from "../lib/submitSession";
 
-export const timerFormat = (ms) => {
+  const timerFormat = (ms) => {
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
@@ -34,7 +34,7 @@ function Confirmation({ goal, setGoal, setPreScreen, startSession }) {
           id="goal"
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
-          placeholder="e.g. Learn the first movement"
+          placeholder="e.g. Work on TYP Auditon"
         />
 
         <button onClick={startSession}>Start Session</button>
@@ -62,6 +62,12 @@ function EndPreview({
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const correctedItems = items.map((item) => ({
+    id: item.id,
+    name: item.name,
+    duration: Math.floor(item.duration / 60000),
+  }));
+
   useEffect(() => {
     pause();
   }, []);
@@ -72,7 +78,7 @@ function EndPreview({
       const response = await submitSession(
         session,
         Math.ceil(elapsed / 60000),
-        items,
+        correctedItems,
         true,
       );
       if (response) {
@@ -99,7 +105,7 @@ function EndPreview({
               onChange={(e) =>
                 setSession({ ...session, title: e.target.value })
               }
-              placeholder="Practice Session"
+              placeholder="Shed Sesh"
             />
           </div>
           <div style={{ width: "75px" }}>
@@ -130,15 +136,14 @@ function EndPreview({
             />
           </div>
           <div>
-            <label htmlFor="improved">Did you get at least 1% better?</label>
-            <input
-              id="improved"
-              type="checkbox"
-              checked={session.improved}
-              onChange={() =>
+            <button
+              className={session.improved ? "button-happy" : "button-sad"}
+              onClick={() =>
                 setSession((prev) => ({ ...prev, improved: !prev.improved }))
               }
-            />
+            >
+              Did you get at least 1% better?
+            </button>
           </div>
         </div>
 
@@ -146,12 +151,18 @@ function EndPreview({
           <label htmlFor="description">Description (optional)</label>
           <textarea
             id="description"
+            style={{
+              background: "var(--bg-secondary)",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              padding: "8px",
+              height: "80px",
+            }}
             placeholder="Worked on some audition material for orchestra"
             value={session.description}
             onChange={(e) =>
               setSession({ ...session, description: e.target.value })
             }
-            style={{ width: "350px", height: "75px" }}
           ></textarea>
         </div>
         <button onClick={callSubmitSession}>
@@ -218,47 +229,79 @@ export default function Live() {
       {!preScreen && (
         <>
           <Navbar />
-          <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "15px",
+            }}
+          >
             <h1>{formattedTime}</h1>
-            <h1>{goal}</h1>
-            {isRunning ? (
-              <button onClick={pause}>BREAK</button>
-            ) : (
-              <button onClick={start}>RESUME</button>
-            )}
-            <button
-              onClick={() => {
-                setEndViewOpen(true);
-              }}
-            >
-              END
-            </button>
+            <h2>{goal}</h2>
+            <div style={{ display: "flex", gap: "15px" }}>
+              <div>
+                <ul className="practice-items">
+                  {renderFinishedItems}
+                  <li>
+                    <ChevronRight />
+                    <input
+                      value={activeItemName}
+                      placeholder="New Item"
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        position: "relative",
+                        bottom: "6px",
+                        outline: "none",
+                        boxShadow: "none",
+                      }}
+                      onChange={(e) => {
+                        setActiveItemName(e.target.value);
+                      }}
+                    />
+                    <span style={{ position: "relative", bottom: "6px" }}>
+                      {timerFormat(elapsed - finishedItemsDuration)}
+                    </span>
+                  </li>
+                </ul>
+              </div>
 
-            <ul className="practice-items">
-              <li>
-                <ChevronRight />
-                <input
-                  value={activeItemName}
-                  placeholder="New Item"
-                  onChange={(e) => {
-                    setActiveItemName(e.target.value);
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "15px",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <button onClick={newItem}> New Item</button>
+
+                {isRunning ? (
+                  <button onClick={pause}>Take a Break </button>
+                ) : (
+                  <button onClick={start}> Resume </button>
+                )}
+                <button
+                  onClick={() => {
+                    setEndViewOpen(true);
                   }}
-                />
-                <span>{timerFormat(elapsed - finishedItemsDuration)}</span>
-              </li>
-              {renderFinishedItems}
-              <button onClick={newItem}>Start a new Item</button>
-              {endViewOpen && (
-                <EndPreview
-                  elapsed={elapsed}
-                  renderItemsList={renderFinishedItems}
-                  items={items}
-                  pause={pause}
-                  start={start}
-                  setOpen={setEndViewOpen}
-                />
-              )}
-            </ul>
+                >
+                  Finish Shed
+                </button>
+              </div>
+            </div>
+
+            {endViewOpen && (
+              <EndPreview
+                elapsed={elapsed}
+                renderItemsList={renderFinishedItems}
+                items={items}
+                pause={pause}
+                start={start}
+                setOpen={setEndViewOpen}
+              />
+            )}
           </div>
         </>
       )}

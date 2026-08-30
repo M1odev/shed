@@ -1,6 +1,8 @@
 import Navbar from "../components/navbar";
 import SessionCard from "../components/SessionCard";
 import { usePracticeSessions } from "../lib/usePracticeSessions";
+import { ChartLine } from "lucide-react";
+
 import { supabase } from "../lib/supabase";
 import { NavLink } from "react-router-dom";
 import { SquarePlus } from "lucide-react";
@@ -42,18 +44,16 @@ export default function Home() {
   const { sessions, loading, error } = usePracticeSessions(10);
   const [practiceMinutes, setPracticeMinutes] = useState(0);
   const [sessionNumber, setSessionNumber] = useState(0);
+  const [viewingStats, setViewingStats] = useState(false);
 
   async function getMinutes() {
     const { data: user, error: userError } = await supabase.auth.getUser();
-    console.log("userid", user.user.id);
     const { data, error } = await supabase.rpc(
       "sum_practice_session_duration",
       {
         p_user_id: user.user.id,
       },
     );
-    console.log("duration:", data[0]["total_duration"]);
-    console.log("count: ", data[0]["sessions_count"]);
 
     if (error || userError) {
       return "unable to find";
@@ -91,12 +91,19 @@ export default function Home() {
               display: "flex",
             }}
           >
-            Shedlog
+            Shed Feed
           </h1>
-          <p style={{ width: "200px" }}>
-            You've practiced for {practiceMinutes} minutes on this acount across{" "}
-            {sessionNumber} sessions
-          </p>
+          <button onClick={() => setViewingStats(!viewingStats)}>
+            {" "}
+            <ChartLine />{" "}
+          </button>
+
+          {viewingStats && (
+            <p style={{ width: "200px" }} className="user-stats">
+              You've practiced for {practiceMinutes} minutes on this acount
+              across {sessionNumber} sessions
+            </p>
+          )}
         </div>
 
         <NewSessionButton />

@@ -57,7 +57,7 @@ export default function PreviousSessions() {
             display: "flex",
           }}
         >
-          Previous Sessions
+          Previous Sheds
         </h1>
 
         <div style={{ display: "flex", flexDirection: "column" }}>

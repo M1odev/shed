@@ -88,7 +88,7 @@ export default function SessionDetails() {
       <main className="session-details">
         <div className="session-details-header">
           <div>
-            <h1>{session.title}</h1>
+            <h1>{session.title ? session.title : "Unnamed Shed Sesh"}</h1>
 
             <h3>
               {session.profiles?.display_name || session.profiles?.username}
@@ -107,7 +107,7 @@ export default function SessionDetails() {
             top: "100px",
           }}
         >
-          {items.length > 0 && (
+          {items.length > 0 ? (
             <section>
               <h2>Practice Items</h2>
               <div
@@ -127,15 +127,19 @@ export default function SessionDetails() {
                 </ul>
               </div>
             </section>
+          ) : (
+            <h3>No practice items recorded for this shed sesh</h3>
           )}
 
           <div className="session-stats">
             <h2>{session.duration} min</h2>
 
-            {session.description && (
+            {session.description ? (
               <>
                 <h3 className="session-description">{session.description}</h3>
               </>
+            ) : (
+              <p className="session-description">No description.</p>
             )}
 
             {session.improved && (

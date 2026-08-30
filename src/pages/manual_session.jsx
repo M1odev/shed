@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { Info } from "lucide-react";
 import { SquareCheck } from "lucide-react";
 import { SquareX } from "lucide-react";
+import { Minus } from "lucide-react";
 import { SquarePlus } from "lucide-react";
 import submitSession from "../lib/submitSession";
 
@@ -108,7 +109,9 @@ function Items({ onDurationChange, onItemsChange }) {
         </div>
 
         <div>
-          <ul className="practice-items">{renderItemsList}</ul>
+          {practiceItems.length > 0 && (
+            <ul className="practice-items">{renderItemsList}</ul>
+          )}
         </div>
       </div>
     </>
@@ -121,7 +124,7 @@ export default function Manual() {
     rating: 5,
     duration: 0,
     description: "",
-    improved: false,
+    improved: true,
   });
 
   const navigate = useNavigate();
@@ -155,137 +158,175 @@ export default function Manual() {
     <>
       <Navbar />
 
-      <h1 style={{ textAlign: "left" }}>Manual</h1>
-
-      <div className="div-container-inline">
-        <div className="input-container" style={{ width: "250px" }}>
-          <label htmlFor="title-input">Title</label>
-          <input
-            id="title-input"
-            value={session.title}
-            onChange={(e) => setSession({ ...session, title: e.target.value })}
-            placeholder="Practice Session"
-          />
+      <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+        <div>
+          <h1 style={{ textAlign: "left" }}>Manual Shed</h1>
         </div>
-
-        <div className="input-container" style={{ width: "125px" }}>
-          <div style={{ display: "inline-flex", gap: "4px" }}>
-            <span>Session Rating:</span>
-            <span>{session.rating}/10</span>
+        <div className="div-container-inline">
+          <div className="input-container" style={{ width: "250px" }}>
+            <label htmlFor="title-input" style={{ fontSize: "1.25rem" }}>
+              Title
+            </label>
+            <input
+              id="title-input"
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                outline: "none",
+                borderBottom: "2px solid var(--border)",
+                minWidth: "350px",
+                minHeight: "70px",
+                fontSize: "40px",
+              }}
+              value={session.title}
+              onChange={(e) =>
+                setSession({ ...session, title: e.target.value })
+              }
+              placeholder="Shed Sesh"
+            />
           </div>
 
-          <input
-            type="range"
-            min="0"
-            max="10"
-            step="1"
-            value={session.rating}
-            onChange={(e) =>
-              setSession({ ...session, rating: Number(e.target.value) })
-            }
-          />
-        </div>
-      </div>
+          <div className="input-container" style={{ width: "220px" }}>
+            <div style={{ display: "inline-flex", gap: "4px" }}>
+              <span> Rating</span>
+            </div>
+            <div>
+              <h2 style={{ fontSize: "2.25rem" }}>
+                {session.rating} out of 10
+              </h2>
+            </div>
 
-      <div
-        className="div-container-inline"
-        style={{
-          justifyContent: "start",
-          gap: "10px",
-          alignItems: "flex-start",
-        }}
-      >
-        <label className="switch">
-          <input
-            type="checkbox"
-            checked={usingItems}
-            onChange={() => SetUsingItems(!usingItems)}
-          />
-          <span className="slider">
-            <span>Duration</span>
-            <span>Items</span>
-          </span>
-        </label>
-
-        <button
-          onClick={() => setViewingInfo(!viewingInfo)}
-          style={{ backgroundColor: "transparent", borderColor: "transparent" }}
-        >
-          <Info />
-        </button>
-        {viewingInfo && (
-          <textarea
-            readOnly
-            style={{
-              width: "250px",
-              height: "60px",
-              resize: "none",
-              outline: "none",
-            }}
-          >
-            Items allows you to break your practice into specific tasks you did
-            during the session instead of simply an overall time.
-          </textarea>
-        )}
-      </div>
-
-      <div className="div-container-inline">
-        {usingItems ? (
-          <Items onDurationChange={setItemDuration} onItemsChange={setItems} />
-        ) : (
-          <div className="input-container">
-            <label htmlFor="duration_input">Duration</label>
             <input
-              type="number"
-              id="duration_input"
-              min="1"
-              value={session.duration}
+              style={{ width: "200px" }}
+              type="range"
+              min="0"
+              max="10"
+              step="1"
+              value={session.rating}
               onChange={(e) =>
-                setSession({ ...session, duration: Number(e.target.value) })
+                setSession({ ...session, rating: Number(e.target.value) })
               }
             />
           </div>
-        )}
-      </div>
-
-      <div className="div-container-inline">
-        <div className="input-container">
-          <label htmlFor="description">Description (optional)</label>
-          <textarea
-            id="description"
-            placeholder="Worked on some audition material for orchestra"
-            value={session.description}
-            onChange={(e) =>
-              setSession({ ...session, description: e.target.value })
-            }
-            style={{ width: "350px", height: "75px" }}
-          ></textarea>
         </div>
 
-        <div>
-          <label htmlFor="improved">Did you get at least 1% better?</label>
-          <input
-            id="improved"
-            type="checkbox"
-            checked={session.improved}
-            onChange={() =>
-              setSession((prev) => ({ ...prev, improved: !prev.improved }))
-            }
-          />
-        </div>
-      </div>
+        <div
+          className="div-container-inline"
+          style={{
+            justifyContent: "start",
+            gap: "10px",
+            alignItems: "flex-start",
+          }}
+        >
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={usingItems}
+              onChange={() => SetUsingItems(!usingItems)}
+            />
+            <span className="slider">
+              <span>Duration</span>
+              <span>Items</span>
+            </span>
+          </label>
 
-      <button
-        onClick={() => callSubmitSession(session, finalDuration, items)}
-        disabled={loading}
-        style={{
-          width: "250px",
-          marginTop: "30px",
-          opacity: loading ? 0.6 : 1,
-        }}
-      >
-        {loading ? "Saving..." : "Save"}
-      </button>
+          <button
+            onClick={() => setViewingInfo(!viewingInfo)}
+            style={{
+              backgroundColor: "transparent",
+              borderColor: "transparent",
+            }}
+          >
+            <Info />
+          </button>
+          {viewingInfo && (
+            <textarea
+              readOnly
+              style={{
+                width: "250px",
+                height: "60px",
+                resize: "none",
+                outline: "none",
+                backgroundColor: "var(--info)",
+                borderRadius: "8px",
+              }}
+            >
+              Items allows you to break your practice into specific tasks you
+              did during the session instead of simply an overall time.
+            </textarea>
+          )}
+        </div>
+
+        <div className="div-container-inline">
+          {usingItems ? (
+            <Items
+              onDurationChange={setItemDuration}
+              onItemsChange={setItems}
+            />
+          ) : (
+            <div className="input-container">
+              <label htmlFor="duration_input">Duration</label>
+              <input
+                type="number"
+                id="duration_input"
+                min="1"
+                value={session.duration}
+                onChange={(e) =>
+                  setSession({ ...session, duration: Number(e.target.value) })
+                }
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="div-container-inline">
+          <div className="input-container">
+            <label htmlFor="description">Description (optional)</label>
+            <textarea
+              id="description"
+              placeholder="Worked on some audition material for orchestra"
+              value={session.description}
+              onChange={(e) =>
+                setSession({ ...session, description: e.target.value })
+              }
+              style={{
+                background: "var(--bg-secondary)",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                padding: "8px",
+                height: "80px",
+                minWidth: "350px",
+                minHeight: " 80px",
+              }}
+            ></textarea>
+          </div>
+
+          <div>
+            <label htmlFor="improved"></label>
+            <button
+              id="improved"
+              onClick={() =>
+                setSession((prev) => ({ ...prev, improved: !prev.improved }))
+              }
+              className={session.improved ? "button-happy" : "button-sad"}
+            >
+              Did you get at least 1% better?
+            </button>
+          </div>
+        </div>
+
+        <button
+          onClick={() => callSubmitSession(session, finalDuration, items)}
+          disabled={loading}
+          style={{
+            width: "250px",
+            marginTop: "30px",
+            opacity: loading ? 0.6 : 1,
+          }}
+        >
+          {loading ? "Saving..." : "Save"}
+        </button>
+      </div>
     </>
   );
 }

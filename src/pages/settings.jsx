@@ -45,44 +45,85 @@ export default function Settings() {
       navigate("/");
     }
   }
+
+  async function deleteAccount() {
+    setLoading(true);
+    try {
+      const { data: user, error: userError } = await supabase.auth.getUser();
+      const { data, error } = await supabase.auth.deleteUser(user.user.id);
+      if (error) {
+        setError(error.message);
+      } else {
+        setSuccessMessage("Account deleted");
+      }
+    } finally {
+      setLoading(false);
+      navigate("/");
+    }
+  }
   return (
     <>
       <Navbar />
-      <div className="input-container" style={{ width: "250px" }}>
-        <h2>Change your Password</h2>
-        <label htmlFor="newpassword">New Password</label>
-        <input
-          id="newpassword"
-          placeholder="enter your new password"
-          value={newPassword}
-          onChange={(e) => {
-            setNewPassword(e.target.value);
-            setError(null);
+      <h1>Settings</h1>
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div
+          className="input-container"
+          style={{
+            width: "250px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
           }}
-        />
-        <label htmlFor="confirmpassword">Confirm Password</label>
-        <input
-          id="confirmpassword"
-          placeholder="confirm password"
-          value={confirmPassword}
-          onChange={(e) => {
-            setConfirm(e.target.value);
-            setError(null);
+        >
+          <h2>Change your Password</h2>
+          <label htmlFor="newpassword">New Password</label>
+          <input
+            id="newpassword"
+            placeholder="enter your new password"
+            value={newPassword}
+            onChange={(e) => {
+              setNewPassword(e.target.value);
+              setError(null);
+            }}
+          />
+          <label htmlFor="confirmpassword">Confirm Password</label>
+          <input
+            id="confirmpassword"
+            placeholder="confirm password"
+            value={confirmPassword}
+            onChange={(e) => {
+              setConfirm(e.target.value);
+              setError(null);
+            }}
+          />
+
+          {error && <p className="error-message">{error}</p>}
+          {successMessage && <p className="text-success">{successMessage}</p>}
+
+          <button onClick={changePassword}>
+            {loading ? "loading" : "Reset Password"}
+          </button>
+        </div>
+        <div
+          className="input-container"
+          style={{
+            width: "250px",
+            position: "relative",
+            top: "50px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
           }}
-        />
-
-        {error && <p className="error-message">{error}</p>}
-        {successMessage && <p className="text-success">{successMessage}</p>}
-
-        <button onClick={changePassword}>
-          {loading ? "loading" : "Reset Password"}
-        </button>
-      </div>
-      <div
-        className="input-container"
-        style={{ width: "250px", position: "relative", top: "50px" }}
-      >
-        <button onClick={logOut}>{loading ? "loading" : "Log Out"}</button>
+        >
+          <h2>Danger Zone</h2>
+          <button onClick={logOut}>{loading ? "loading" : "Log Out"}</button>
+          <button
+            onClick={deleteAccount}
+            style={{ backgroundColor: "red", color: "white" }}
+          >
+            {loading ? "loading" : "Delete Account"}
+          </button>
+        </div>
       </div>
     </>
   );

@@ -41,7 +41,6 @@ export default function Auth() {
 
       if (error) {
         setPassword("");
-        console.log("signup error: ", error);
         setErrorMessage(error.message);
         return;
       }
@@ -61,7 +60,7 @@ export default function Auth() {
       });
 
       if (error) {
-        Message(error.message);
+        setErrorMessage(error.message);
         return;
       }
 

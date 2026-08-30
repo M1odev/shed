@@ -16,22 +16,26 @@ export default function SessionCard({ session, userInfo }) {
           </div>
         )}
 
+        <h2>{session.title}</h2>
+
         <span className="timestamp">
           {formatRelativeTime(session.created_at)}
         </span>
       </div>
 
-      <h2>{session.title}</h2>
+      <h1>{session.duration ? session.duration : 0}:00</h1>
 
       <p>{session.description}</p>
 
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <span>{session.duration} min</span>
-        <span>{session.rating}/10</span>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <button onClick={() => navigate(`/sessions/${session.id}`)}>
+          See Details
+        </button>
+
+        <div>
+          <h3> {session.rating} of out 10</h3>
+        </div>
       </div>
-      <button onClick={() => navigate(`/sessions/${session.id}`)}>
-        See Details
-      </button>
     </article>
   );
 }
