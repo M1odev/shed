@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { GraduationCap } from "lucide-react";
 import { formatRelativeTime } from "../lib/formatRelativeTime";
 import Navbar from "../components/navbar";
 
@@ -89,40 +90,62 @@ export default function SessionDetails() {
           <div>
             <h1>{session.title}</h1>
 
-            <p>
+            <h3>
               {session.profiles?.display_name || session.profiles?.username}
               {" · "}
               {formatRelativeTime(session.created_at)}
-            </p>
+              {" · "}
+              {session.rating}/10
+            </h3>
           </div>
-
-          <div className="session-rating">{session.rating}/10</div>
         </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            position: "relative",
+            top: "100px",
+          }}
+        >
+          {items.length > 0 && (
+            <section>
+              <h2>Practice Items</h2>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <ul className="practice-items">
+                  {items.map((item) => (
+                    <li className="practice-item" key={item.id}>
+                      <span>{item.item_name}</span>
+                      <span>{item.duration} minutes</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+          )}
 
-        <div className="session-stats">
-          <span>{session.duration} minutes</span>
+          <div className="session-stats">
+            <h2>{session.duration} min</h2>
 
-          {session.improved && <span>✓ 1% better</span>}
+            {session.description && (
+              <>
+                <h3 className="session-description">{session.description}</h3>
+              </>
+            )}
+
+            {session.improved && (
+              <h4>
+                {" "}
+                <GraduationCap /> 1% better
+              </h4>
+            )}
+          </div>
         </div>
-
-        {session.description && (
-          <p className="session-description">{session.description}</p>
-        )}
-
-        {items.length > 0 && (
-          <section>
-            <h2>Practice Items</h2>
-
-            <ul className="practice-items">
-              {items.map((item) => (
-                <li className="practice-item" key={item.id}>
-                  <span>{item.item_name}</span>
-                  <span>{item.duration} minutes</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
       </main>
     </>
   );

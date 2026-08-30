@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { signUp, signIn } from "../lib/auth";
 import { supabase } from "../lib/supabase";
-import {useNavigate} from "react-router-dom";
-
-
-
+import { useNavigate } from "react-router-dom";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -29,7 +26,7 @@ export default function Auth() {
         setErrorMessage(error.message);
         return;
       }
-      navigate("/home")
+      navigate("/home");
     } finally {
       setLoading(false);
     }
@@ -48,7 +45,7 @@ export default function Auth() {
         setErrorMessage(error.message);
         return;
       }
-      navigate("/onboarding")
+      navigate("/onboarding");
     } finally {
       setLoading(false);
     }
@@ -60,11 +57,11 @@ export default function Auth() {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "http://localhost:5173/reset-password",
+        redirectTo: "http://localhost:5173/settings",
       });
 
       if (error) {
-        setErrorMessage(error.message);
+        Message(error.message);
         return;
       }
 

@@ -9,6 +9,7 @@ import Manual from "./pages/manual_session";
 import SessionDetails from "./pages/session_details";
 import PreviousSessions from "./pages/previous_sessions";
 import Live from "./pages/live_session";
+import Settings from "./pages/settings";
 
 function ProtectedRoute() {
   const [loading, setLoading] = useState(true);
@@ -94,6 +95,7 @@ export default function App() {
         <Route path="/sessions/:sessionId" element={<SessionDetails />} />
         <Route path="/previous_sessions" element={<PreviousSessions />} />
         <Route path="/live_session" element={<Live />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
     </Routes>
   );

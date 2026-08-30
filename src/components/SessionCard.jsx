@@ -12,7 +12,7 @@ export default function SessionCard({ session, userInfo }) {
               {session.profiles.display_name}
             </span>
 
-            <span className="username">@{session.profiles.username}</span>
+            <span className="username"> @{session.profiles.username}</span>
           </div>
         )}
 

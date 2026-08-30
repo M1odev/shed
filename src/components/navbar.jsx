@@ -28,9 +28,8 @@ export default function Navbar() {
         </button>
 
         <NavLink to="/home">Home</NavLink>
-        <NavLink to="/previous_sessions">Previous Sessions</NavLink>
-        <NavLink to="/home">Account</NavLink>
-        <NavLink to="/home">Setting</NavLink>
+        <NavLink to="/previous_sessions">Past Sheds</NavLink>
+        <NavLink to="/settings">Settings</NavLink>
       </nav>
     </>
   );
