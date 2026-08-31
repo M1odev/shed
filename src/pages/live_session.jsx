@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react";
 
 import submitSession from "../lib/submitSession";
 
-  const timerFormat = (ms) => {
+const timerFormat = (ms) => {
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
@@ -97,7 +97,7 @@ function EndPreview({
     <div className="confirmation-backdrop" onClick={closePreview}>
       <div className="confirmation-popup" onClick={(e) => e.stopPropagation()}>
         <div className="div-container-inline">
-          <div className="input-container" style={{ width: "250px" }}>
+          <div className="input-container live-preview-field">
             <label htmlFor="title-input">Title</label>
             <input
               id="title-input"
@@ -108,7 +108,7 @@ function EndPreview({
               placeholder="Shed Sesh"
             />
           </div>
-          <div style={{ width: "75px" }}>
+          <div className="live-preview-time">
             <h2>{timerFormat(elapsed)}</h2>
           </div>
         </div>
@@ -118,7 +118,7 @@ function EndPreview({
         </div>
 
         <div className="div-container-inline">
-          <div className="input-container" style={{ width: "125px" }}>
+          <div className="input-container live-rating-field">
             <div style={{ display: "inline-flex", gap: "4px" }}>
               <span>Session Rating:</span>
               <span>{session.rating}/10</span>
@@ -156,7 +156,8 @@ function EndPreview({
               border: "1px solid #ccc",
               borderRadius: "4px",
               padding: "8px",
-              height: "80px",
+              minHeight: "5rem",
+              height: "clamp(4rem, 12vw, 5rem)",
             }}
             placeholder="Worked on some audition material for orchestra"
             value={session.description}

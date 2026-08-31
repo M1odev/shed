@@ -47,18 +47,9 @@ export default function PreviousSessions() {
     <>
       <Navbar />
       <div className="main-content-wrapper">
-        <h1
-          style={{
-            position: "fixed",
-            top: "0",
-            left: "11vw",
-            margin: "100",
-            fontSize: "35px",
-            display: "flex",
-          }}
-        >
-          Previous Sheds
-        </h1>
+        <div className="page-header">
+          <h1>Previous Sheds</h1>
+        </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           {loading && <p>Loading...</p>}

@@ -67,9 +67,9 @@ export default function Settings() {
       <h1>Settings</h1>
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <div
-          className="input-container"
+          className="input-container settings-panel"
           style={{
-            width: "250px",
+            width: "min(100%, 250px)",
             display: "flex",
             flexDirection: "column",
             gap: "10px",
@@ -105,11 +105,11 @@ export default function Settings() {
           </button>
         </div>
         <div
-          className="input-container"
+          className="input-container settings-panel danger-zone"
           style={{
-            width: "250px",
+            width: "min(100%, 250px)",
             position: "relative",
-            top: "50px",
+            marginTop: "2.5rem",
             display: "flex",
             flexDirection: "column",
             gap: "10px",

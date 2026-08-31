@@ -103,8 +103,9 @@ export default function SessionDetails() {
           style={{
             display: "flex",
             justifyContent: "space-evenly",
-            position: "relative",
-            top: "100px",
+            flexWrap: "wrap",
+            gap: "1.5rem",
+            marginTop: "2rem",
           }}
         >
           {items.length > 0 ? (

@@ -74,32 +74,15 @@ export default function Home() {
     <>
       <Navbar />
       <div className="main-content-wrapper">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            position: "fixed",
-            top: "0",
-            left: "11vw",
-            gap: "15px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "35px",
-              display: "flex",
-            }}
-          >
-            Shed Feed
-          </h1>
+        <div className="page-header">
+          <h1>Shed Feed</h1>
           <button onClick={() => setViewingStats(!viewingStats)}>
             {" "}
             <ChartLine />{" "}
           </button>
 
           {viewingStats && (
-            <p style={{ width: "200px" }} className="user-stats">
+            <p className="user-stats">
               You've practiced for {practiceMinutes} minutes on this acount
               across {sessionNumber} sessions
             </p>

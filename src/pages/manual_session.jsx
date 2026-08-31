@@ -48,21 +48,8 @@ function Items({ onDurationChange, onItemsChange }) {
 
   return (
     <>
-      <div
-        className="div-container-inline"
-        style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: "5px",
-          }}
-        >
+      <div className="manual-items-row">
+        <div className="manual-items-controls">
           <button
             onClick={() => setMakingItem(true)}
             style={{
@@ -76,8 +63,11 @@ function Items({ onDurationChange, onItemsChange }) {
           </button>
 
           {makingItem && (
-            <div className="div-container-inline">
-              <form onSubmit={addItem} style={{ display: "flex", gap: "15px" }}>
+            <div className="manual-item-form-row">
+              <form
+                onSubmit={addItem}
+                style={{ display: "flex", gap: "15px", flexWrap: "balance" }}
+              >
                 <input
                   className="line-text"
                   type="text"
@@ -108,9 +98,11 @@ function Items({ onDurationChange, onItemsChange }) {
           )}
         </div>
 
-        <div>
+        <div className="manual-items-list">
           {practiceItems.length > 0 && (
-            <ul className="practice-items">{renderItemsList}</ul>
+            <ul className="practice-items manual-practice-items">
+              {renderItemsList}
+            </ul>
           )}
         </div>
       </div>
@@ -158,12 +150,12 @@ export default function Manual() {
     <>
       <Navbar />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
-        <div>
-          <h1 style={{ textAlign: "left" }}>Manual Shed</h1>
+      <div className="manual-page-shell">
+        <div className="page-header">
+          <h1>Manual Shed</h1>
         </div>
-        <div className="div-container-inline">
-          <div className="input-container" style={{ width: "250px" }}>
+        <div className="div-container-inline manual-top-row">
+          <div className="input-container manual-title-field">
             <label htmlFor="title-input" style={{ fontSize: "1.25rem" }}>
               Title
             </label>
@@ -174,9 +166,9 @@ export default function Manual() {
                 border: "none",
                 outline: "none",
                 borderBottom: "2px solid var(--border)",
-                minWidth: "350px",
-                minHeight: "70px",
-                fontSize: "40px",
+                minHeight: "4.5rem",
+                fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
+                width: "min(100%, 26rem)",
               }}
               value={session.title}
               onChange={(e) =>
@@ -186,7 +178,7 @@ export default function Manual() {
             />
           </div>
 
-          <div className="input-container" style={{ width: "220px" }}>
+          <div className="input-container manual-rating-field">
             <div style={{ display: "inline-flex", gap: "4px" }}>
               <span> Rating</span>
             </div>
@@ -197,7 +189,7 @@ export default function Manual() {
             </div>
 
             <input
-              style={{ width: "200px" }}
+              style={{ width: "min(100%, 200px)" }}
               type="range"
               min="0"
               max="10"
@@ -210,14 +202,7 @@ export default function Manual() {
           </div>
         </div>
 
-        <div
-          className="div-container-inline"
-          style={{
-            justifyContent: "start",
-            gap: "10px",
-            alignItems: "flex-start",
-          }}
-        >
+        <div className="manual-controls-row">
           <label className="switch">
             <input
               type="checkbox"
@@ -243,8 +228,8 @@ export default function Manual() {
             <textarea
               readOnly
               style={{
-                width: "250px",
-                height: "60px",
+                width: "min(100%, 250px)",
+                minHeight: "3.75rem",
                 resize: "none",
                 outline: "none",
                 backgroundColor: "var(--info)",
@@ -257,7 +242,7 @@ export default function Manual() {
           )}
         </div>
 
-        <div className="div-container-inline">
+        <div className="manual-items-wrapper">
           {usingItems ? (
             <Items
               onDurationChange={setItemDuration}
@@ -269,6 +254,7 @@ export default function Manual() {
               <input
                 type="number"
                 id="duration_input"
+                style={{ maxWidth: "100px" }}
                 min="1"
                 value={session.duration}
                 onChange={(e) =>
@@ -279,7 +265,7 @@ export default function Manual() {
           )}
         </div>
 
-        <div className="div-container-inline">
+        <div className="div-container-inline manual-bottom-row">
           <div className="input-container">
             <label htmlFor="description">Description (optional)</label>
             <textarea
@@ -294,9 +280,8 @@ export default function Manual() {
                 border: "1px solid #ccc",
                 borderRadius: "4px",
                 padding: "8px",
-                height: "80px",
-                minWidth: "350px",
-                minHeight: " 80px",
+                minHeight: "5rem",
+                width: "min(100%, 26rem)",
               }}
             ></textarea>
           </div>
@@ -315,17 +300,19 @@ export default function Manual() {
           </div>
         </div>
 
-        <button
-          onClick={() => callSubmitSession(session, finalDuration, items)}
-          disabled={loading}
-          style={{
-            width: "250px",
-            marginTop: "30px",
-            opacity: loading ? 0.6 : 1,
-          }}
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
+        <div className="manual-submit-row">
+          <button
+            onClick={() => callSubmitSession(session, finalDuration, items)}
+            disabled={loading}
+            style={{
+              width: "min(100%, 250px)",
+              marginTop: "30px",
+              opacity: loading ? 0.6 : 1,
+            }}
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+        </div>
       </div>
     </>
   );
