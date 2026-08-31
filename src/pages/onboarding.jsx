@@ -89,7 +89,9 @@ export default function Onboarding() {
             display: "flex",
             flexDirection: "column",
             gap: "1vh",
-            minWidth: "25vw",
+            maxWidth: "85vw",
+            position: "relative",
+            top: "-20vh",
           }}
         >
           <h2>Create your Profile</h2>
