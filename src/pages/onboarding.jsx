@@ -82,47 +82,61 @@ export default function Onboarding() {
 
   return (
     <>
-      <div className="inline-container">
-        <div>
-          <h2>Create a username</h2>
-          <p>This should be unique so your friends can find you</p>
-        </div>
-        <input
-          type="text"
-          className="line-input"
-          value={userName}
-          onChange={(e) => {
-            setUser(e.target.value);
-            setUserError("");
+      <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
+        <div
+          className="input-container"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1vh",
+            minWidth: "25vw",
           }}
-          onBlur={(e) => checkUsername(e)}
-        />
-        <CheckFeedback />
-      </div>
-      <div className="inline-container">
-        <div>
-          <h2>Choose a display name</h2>
-          <p>This will show up on the leaderboard and in session posts</p>
+        >
+          <h2>Create your Profile</h2>
+          <label htmlFor="username-input">Choose a username</label>
+          <input
+            type="text"
+            className="inputField"
+            id="username-input"
+            value={userName}
+            onChange={(e) => {
+              setUser(e.target.value);
+              setUserError("");
+            }}
+            onBlur={(e) => checkUsername(e)}
+          />
+          {userError && <CheckFeedback />}
+
+          <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+            This should be a unique identifier so your friends can find you.
+          </p>
+
+          <label htmlFor="display-input">Display Name</label>
+          <input
+            type="text"
+            className="inputField"
+            value={display}
+            onChange={(e) => {
+              setDisplay(e.target.value);
+            }}
+          />
+          <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+            This is the name that will show up with all your practice sessions.
+            Be creative!
+          </p>
+
+          <button
+            className="btn-insert"
+            style={{ backgroundColor: "var(--primary)" }}
+            onClick={submitProfile}
+            disabled={userError !== "" && userError !== "success"}
+          >
+            {userError !== "" && userError !== "success"
+              ? "Username Error"
+              : "Continue"}
+          </button>
         </div>
-        <input
-          type="text"
-          className="line-input"
-          value={display}
-          onChange={(e) => {
-            setDisplay(e.target.value);
-          }}
-        />
       </div>
-      <button
-        className="btn-insert"
-        style={{ width: "200px" }}
-        onClick={submitProfile}
-        disabled={userError !== "" && userError !== "success"}
-      >
-        {userError !== "" && userError !== "success"
-          ? "Username Error"
-          : "Continue"}
-      </button>
     </>
   );
 }
