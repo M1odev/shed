@@ -53,47 +53,63 @@ function Items({ onDurationChange, onItemsChange }) {
           <button
             onClick={() => setMakingItem(true)}
             style={{
-              maxWidth: "100px",
+              width: "clamp(100px, 40vw, 200px)",
               borderColor: "transparent",
               backgroundColor: "transparent",
               marginTop: "15px",
             }}
           >
-            <SquarePlus />
+            <SquarePlus /> {!makingItem && "New Item"}
           </button>
 
           {makingItem && (
             <div className="manual-item-form-row">
               <form
                 onSubmit={addItem}
-                style={{ display: "flex", gap: "15px", flexWrap: "balance" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "15px",
+                  flexWrap: "balance",
+                  fontSize: "clamp(1.25rem, 2vw, 1.5rem)",
+                }}
               >
                 <input
                   className="line-text"
                   type="text"
                   name="name"
-                  placeholder="Item Name"
+                  placeholder="Name"
+                  style={{
+                    fontSize: "clamp(1.25rem, 2vw, 1.5rem)",
+                    width: "clamp(75px, 40vw, 250px)",
+                  }}
                   required
                 />
                 <input
                   className="line-text"
+                  style={{
+                    fontSize: "clamp(1.25rem, 2vw, 1.5rem)",
+                    width: "clamp(75px, 40vw, 250px)",
+                  }}
                   type="number"
                   name="duration"
-                  placeholder="Duration in Minutes"
+                  placeholder="Duration (min)"
                   min="1"
                   required
                 />
-                <button className="icon-button" type="submit">
-                  {" "}
-                  <SquareCheck />{" "}
-                </button>
+                <div>
+                  <button className="icon-button" type="submit">
+                    {" "}
+                    <SquareCheck />{" "}
+                  </button>
+                  <button
+                    className="icon-button"
+                    onClick={() => setMakingItem(false)}
+                  >
+                    <SquareX />
+                  </button>
+                </div>
               </form>
-              <button
-                className="icon-button"
-                onClick={() => setMakingItem(false)}
-              >
-                <SquareX />
-              </button>
             </div>
           )}
         </div>
@@ -178,7 +194,10 @@ export default function Manual() {
             />
           </div>
 
-          <div className="input-container manual-rating-field">
+          <div
+            className="input-container manual-rating-field"
+            style={{ display: "flex", alignItems: "center", gap: "10px" }}
+          >
             <div style={{ display: "inline-flex", gap: "4px" }}>
               <span> Rating</span>
             </div>
@@ -249,12 +268,12 @@ export default function Manual() {
               onItemsChange={setItems}
             />
           ) : (
-            <div className="input-container">
+            <div className="input-container manual-duration-field">
               <label htmlFor="duration_input">Duration</label>
               <input
                 type="number"
                 id="duration_input"
-                style={{ maxWidth: "100px" }}
+                style={{ width: "min(100%, 200px)" }}
                 min="1"
                 value={session.duration}
                 onChange={(e) =>
@@ -280,8 +299,9 @@ export default function Manual() {
                 border: "1px solid #ccc",
                 borderRadius: "4px",
                 padding: "8px",
-                minHeight: "5rem",
-                width: "min(100%, 26rem)",
+                minHeight: "7rem",
+                width: "clamp(250px, 80vw, 400px)",
+                fontSize: "clamp(1rem, 2vw, 1.25rem)",
               }}
             ></textarea>
           </div>

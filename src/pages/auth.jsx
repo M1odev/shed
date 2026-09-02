@@ -56,7 +56,7 @@ export default function Auth() {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/settings`,
+        redirectTo: `https://shed-m1o.vercel.app/settings`,
       });
 
       if (error) {
@@ -70,45 +70,82 @@ export default function Auth() {
     }
   };
 
+  const anonymousSignIn = async () => {
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const { data, error } = await supabase.auth.signInAnonymously();
+      if (error) {
+        setErrorMessage(error.message);
+        return;
+      }
+      navigate("/home");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="row flex flex-center">
+    <div
+      style={{
+        height: "100vh",
+        width: "100vw",
+        display: "grid",
+        placeItems: "center",
+      }}
+    >
       <div className="col-6 form-widget">
-        <h1 className="header">
-          {isLogin ? "Welcome Back" : "Create an Account"}
-        </h1>
-
-        <p className="description">
-          {isLogin
-            ? "Sign in to continue."
-            : "Create an account to start tracking your practice."}
-        </p>
-
-        <div className="form-widget">
-          <div>
-            <input
-              className="inputField"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setErrorMessage("");
+        <div
+          className="input-container"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "1vh",
+            width: "clamp(25rem, 80vw, 400px)",
+          }}
+        >
+          <h1 className="header">
+            Shed{" "}
+            <img
+              style={{
+                width: "6rem",
+                height: "6rem",
+                position: "relative",
+                top: "15px",
               }}
+              src="../../../public/192transparentlight.png"
+              alt="Shed Logo"
             />
-          </div>
+          </h1>
 
-          <div>
-            <input
-              className="inputField"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setErrorMessage("");
-              }}
-            />
-          </div>
+          <p className="description">
+            {isLogin
+              ? "Here we go again"
+              : "Create an account to start tracking your sheddin'"}
+          </p>
+          <input
+            className="inputField"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setErrorMessage("");
+            }}
+          />
+
+          <input
+            className="inputField"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setErrorMessage("");
+            }}
+          />
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
@@ -146,6 +183,15 @@ export default function Auth() {
                 </button>
               </p>
             )}
+            or{" "}
+            <button
+              type="button"
+              className="link-button"
+              disabled={loading}
+              onClick={anonymousSignIn}
+            >
+              Shed as a guest
+            </button>
           </div>
 
           {isLogin && (

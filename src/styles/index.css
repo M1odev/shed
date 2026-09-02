@@ -2,7 +2,7 @@
   --primary: #ec4899;
   --primary-light: #f472b6;
   --primary-dark: #db2777;
-  --primary-bg: rgba(236, 72, 153, 0.1);
+  --primary-bg: #6674b4;
   --primary-border: rgba(236, 72, 153, 0.3);
 
   --text: #64748b;
@@ -50,7 +50,7 @@
   --primary: #0080ff;
   --primary-light: #48a0f1;
   --primary-dark: #092dcc;
-  --primary-bg: rgba(67, 76, 155, 0.15);
+  --primary-bg: #6674b4;
   --primary-border: #15d8df;
 
   --text: #cbd5e1;
@@ -87,7 +87,7 @@
     --primary: #0080ff;
     --primary-light: #48a0f1;
     --primary-dark: #092dcc;
-    --primary-bg: rgba(67, 76, 155, 0.15);
+    --primary-bg: #6674b4;
     --primary-border: #15d8df;
 
     --text: #cbd5e1;
@@ -632,9 +632,14 @@ code {
 .manual-controls-row,
 .manual-bottom-row,
 .manual-submit-row,
-.manual-items-row {
+.manual-items-row,
+.manual-items-wrapper {
   width: min(100%, 980px);
   margin: 0 auto;
+}
+
+.manual-duration-field {
+  width: min(100%, 250px);
 }
 
 .manual-top-row,
@@ -657,6 +662,7 @@ code {
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
+  width: clamp(100%, 1000px, 100%);
 }
 
 .manual-items-row {

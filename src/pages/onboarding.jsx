@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 
@@ -16,10 +16,29 @@ async function checkIndividuality(username) {
 export default function Onboarding() {
   const [userName, setUser] = useState("");
   const [userError, setUserError] = useState("");
+  const [anyonymous, setAnonymous] = useState(false);
 
   const [display, setDisplay] = useState("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function checkAnonymous() {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error fetching user:", error);
+        return;
+      }
+      if (user.is_anonymous) {
+        setAnonymous(true);
+        setUser(crypto.randomUUID());
+      }
+    }
+    checkAnonymous();
+  }, []);
 
   async function submitProfile() {
     const {
@@ -94,7 +113,9 @@ export default function Onboarding() {
             top: "-20vh",
           }}
         >
-          <h2>Create your Profile</h2>
+          <h2> {anyonymous ? "Choose a display name" : "Create your Profile"}</h2>
+          {!anyonymous &&(
+            <>
           <label htmlFor="username-input">Choose a username</label>
           <input
             type="text"
@@ -107,12 +128,16 @@ export default function Onboarding() {
             }}
             onBlur={(e) => checkUsername(e)}
           />
-          {userError && <CheckFeedback />}
-
           <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
             This should be a unique identifier so your friends can find you.
           </p>
 
+          </>
+          )}
+          {userError && <CheckFeedback />}
+        
+
+          
           <label htmlFor="display-input">Display Name</label>
           <input
             type="text"
@@ -123,8 +148,7 @@ export default function Onboarding() {
             }}
           />
           <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
-            This is the name that will show up with all your practice sessions.
-            Be creative!
+            { anyonymous ? "This name will show up with all your shed sessions in this tab." : "This is the name that will show up with all your practice sessions. Be creative!"}
           </p>
 
           <button
