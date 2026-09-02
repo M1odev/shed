@@ -115,7 +115,7 @@ export default function Auth() {
                 position: "relative",
                 top: "15px",
               }}
-              src="../../../public/192transparentlight.png"
+              src="/192transparentlight.png"
               alt="Shed Logo"
             />
           </h1>
